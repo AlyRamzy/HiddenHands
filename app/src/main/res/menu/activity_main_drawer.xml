@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:showIn="navigation_view">
+
+    <group android:checkableBehavior="single">
+        <item
+            android:id="@+id/home"
+            android:icon="@drawable/home"
+            android:checked="true"
+            android:title="Home Page" />
+        <item
+            android:id="@+id/signin"
+            android:icon="@drawable/login"
+            android:title="Sign In" />
+        <item
+            android:id="@+id/signup_user"
+            android:icon="@drawable/user"
+            android:title="Sign up User" />
+        <item
+            android:id="@+id/signup_doctor"
+            android:icon="@drawable/doctor"
+            android:title="Sign up Doctor" />
+        <item
+            android:id="@+id/fav_doctors"
+            android:icon="@drawable/love"
+            android:title="Favourite Doctors" />
+        <item
+            android:id="@+id/about"
+            android:icon="@drawable/about"
+            android:title="About" />
+        <item
+            android:id="@+id/howtouse"
+            android:icon="@drawable/howtouse"
+            android:title="How To Use" />
+
+
+    </group>
+
+    <item android:title="Account">
+        <menu>
+            <item
+                android:id="@+id/profile"
+                android:icon="@drawable/profile"
+                android:title="Profile" />
+            <item
+                android:id="@+id/logout"
+                android:icon="@drawable/log_out"
+                android:title="Logout" />
+        </menu>
+    </item>
+
+</menu>
