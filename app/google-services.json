@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "773641279082",
+    "firebase_url": "https://hidden-hands.firebaseio.com",
+    "project_id": "hidden-hands",
+    "storage_bucket": "hidden-hands.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:773641279082:android:5f96b4ef3260b3f5",
+        "android_client_info": {
+          "package_name": "com.example.aly.hiddenhands"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "773641279082-idhq28b3g9tvqggoagg2coe72oit6uh2.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.aly.hiddenhands",
+            "certificate_hash": "77221fb25735a7f92fcd453ced34d0e9c8c5e085"
+          }
+        },
+        {
+          "client_id": "773641279082-sfo7oj405rl4t360oqi6fnkavatfhson.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBfremgYJ5g6OdVUKqlUsyP0GzCpCiM0NU"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "773641279082-sfo7oj405rl4t360oqi6fnkavatfhson.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
