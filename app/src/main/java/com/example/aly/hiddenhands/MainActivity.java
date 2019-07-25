@@ -16,8 +16,11 @@ import android.view.Menu;
 import android.view.MenuItem;
 
 import com.example.aly.hiddenhands.fragments.About;
+import com.example.aly.hiddenhands.fragments.FavouriteDoctors;
 import com.example.aly.hiddenhands.fragments.HowToUse;
 import com.example.aly.hiddenhands.fragments.PatientHomePage;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
@@ -26,12 +29,21 @@ public class MainActivity extends AppCompatActivity
     private PatientHomePage patientHomePage;
     private About about;
     private HowToUse howToUse;
+    private FavouriteDoctors favouriteDoctors;
+
+    //Firebase
+    private FirebaseDatabase mFirebaseDatabase;
+    private DatabaseReference mMessageDatabaseReference;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        //firebase initialize
+        mFirebaseDatabase=FirebaseDatabase.getInstance();
+        mMessageDatabaseReference=mFirebaseDatabase.getReference().child("Users");
+        mMessageDatabaseReference.push().setValue("working?");
 
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
@@ -58,6 +70,8 @@ public class MainActivity extends AppCompatActivity
         patientHomePage=new PatientHomePage();
         about=new About();
         howToUse=new HowToUse();
+        favouriteDoctors=new FavouriteDoctors();
+
 
         loadFragment(patientHomePage);
 
@@ -108,6 +122,7 @@ public class MainActivity extends AppCompatActivity
         } else if (id == R.id.signup_doctor) {
 
         } else if (id == R.id.fav_doctors) {
+            loadFragment(favouriteDoctors);
 
         } else if (id == R.id.about) {
             loadFragment(about);
