@@ -12,10 +12,10 @@ import com.example.aly.hiddenhands.R;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class Notifications extends Fragment {
+public class Chats extends Fragment {
 
 
-    public Notifications() {
+    public Chats() {
         // Required empty public constructor
     }
 
@@ -24,7 +24,7 @@ public class Notifications extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_notifications, container, false);
+        return inflater.inflate(R.layout.fragment_chats, container, false);
     }
 
 }

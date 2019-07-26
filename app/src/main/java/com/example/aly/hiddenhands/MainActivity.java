@@ -1,10 +1,12 @@
 package com.example.aly.hiddenhands;
 
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
+import android.support.v7.widget.SearchView;
 import android.view.View;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -14,27 +16,49 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.Toast;
 
 import com.example.aly.hiddenhands.fragments.About;
 import com.example.aly.hiddenhands.fragments.FavouriteDoctors;
 import com.example.aly.hiddenhands.fragments.HowToUse;
+import com.example.aly.hiddenhands.fragments.Login;
 import com.example.aly.hiddenhands.fragments.PatientHomePage;
+import com.example.aly.hiddenhands.fragments.SignupDoctor;
+import com.example.aly.hiddenhands.fragments.SignupUser;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
+    NavigationView navigationView;
+    android.widget.SearchView searchView;
 
     //My Fragments
     private PatientHomePage patientHomePage;
     private About about;
     private HowToUse howToUse;
     private FavouriteDoctors favouriteDoctors;
+    private SignupUser signupUser;
+    private Login login;
+    private SignupDoctor signupDoctor;
 
     //Firebase
     private FirebaseDatabase mFirebaseDatabase;
     private DatabaseReference mMessageDatabaseReference;
+    private FirebaseAuth mFirebaseAuth;
+    private boolean Auth=false;
 
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        if(mFirebaseAuth.getCurrentUser()==null){
+        }
+        else{
+        }
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,10 +66,60 @@ public class MainActivity extends AppCompatActivity
         setContentView(R.layout.activity_main);
         //firebase initialize
         mFirebaseDatabase=FirebaseDatabase.getInstance();
-        mMessageDatabaseReference=mFirebaseDatabase.getReference().child("Users");
-        mMessageDatabaseReference.push().setValue("working?");
+        mFirebaseAuth=FirebaseAuth.getInstance();
+        mFirebaseAuth.addAuthStateListener(new FirebaseAuth.AuthStateListener() {
+            @Override
+            public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
+                FirebaseUser firebaseUser=firebaseAuth.getCurrentUser();
+                if(firebaseUser!=null){
+
+                    navigationView.getMenu().getItem(0).setVisible(true);
+                    navigationView.getMenu().getItem(1).setVisible(false);
+                    navigationView.getMenu().getItem(2).setVisible(false);
+                    navigationView.getMenu().getItem(3).setVisible(false);
+                    navigationView.getMenu().getItem(4).setVisible(true);
+                    navigationView.getMenu().getItem(5).setVisible(true);
+                    navigationView.getMenu().getItem(6).setVisible(true);
+                    navigationView.getMenu().getItem(7).setVisible(true);
+
+                    login=null;
+                    signupDoctor=null;
+                    signupUser=null;
+                    patientHomePage=new PatientHomePage();
+                    favouriteDoctors=new FavouriteDoctors();
+                    navigationView.getMenu().getItem(0).setChecked(true);
+                    loadFragment(patientHomePage);
+
+                    Toast.makeText(MainActivity.this, "Welcome To HiddenHands", Toast.LENGTH_SHORT).show();
+
+                }
+                else{
+
+                    navigationView.getMenu().getItem(0).setVisible(false);
+                    navigationView.getMenu().getItem(1).setVisible(true);
+                    navigationView.getMenu().getItem(2).setVisible(true);
+                    navigationView.getMenu().getItem(3).setVisible(true);
+                    navigationView.getMenu().getItem(4).setVisible(false);
+                    navigationView.getMenu().getItem(5).setVisible(true);
+                    navigationView.getMenu().getItem(6).setVisible(true);
+                    navigationView.getMenu().getItem(7).setVisible(false);
+                    patientHomePage=null;
+                    favouriteDoctors=null;
+                    login=new Login();
+                    signupDoctor=new SignupDoctor();
+                    signupUser=new SignupUser();
+                    navigationView.getMenu().getItem(5).setChecked(true);
+                    loadFragment(about);
+                }
+
+            }
+        });
+        if(mFirebaseAuth.getCurrentUser()!=null){
+            Auth=true;
+        }
 
 
+        searchView=(android.widget.SearchView)findViewById(R.id.search_bar);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
@@ -64,16 +138,31 @@ public class MainActivity extends AppCompatActivity
         drawer.addDrawerListener(toggle);
         toggle.syncState();
 
-        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
+        navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
         //initialize Fragments
-        patientHomePage=new PatientHomePage();
         about=new About();
         howToUse=new HowToUse();
-        favouriteDoctors=new FavouriteDoctors();
+
+        if(Auth){
+            patientHomePage=new PatientHomePage();
+            favouriteDoctors=new FavouriteDoctors();
+            navigationView.getMenu().getItem(0).setChecked(true);
+            loadFragment(patientHomePage);
+
+        }
+        else{
+            signupUser=new SignupUser();
+            signupDoctor=new SignupDoctor();
+            login=new Login();
+            navigationView.getMenu().getItem(5).setChecked(true);
+            loadFragment(about);
+        }
 
 
-        loadFragment(patientHomePage);
+
+
+
 
     }
 
@@ -116,25 +205,36 @@ public class MainActivity extends AppCompatActivity
         int id = item.getItemId();
 
         if (id == R.id.signin) {
-            // Handle the camera action
+            searchView.setVisibility(View.GONE);
+            loadFragment(login);
         } else if (id == R.id.signup_user) {
+            searchView.setVisibility(View.GONE);
+            loadFragment(signupUser);
 
         } else if (id == R.id.signup_doctor) {
+            searchView.setVisibility(View.GONE);
+            loadFragment(signupDoctor);
+
 
         } else if (id == R.id.fav_doctors) {
+            searchView.setVisibility(View.VISIBLE);
             loadFragment(favouriteDoctors);
 
         } else if (id == R.id.about) {
+            searchView.setVisibility(View.VISIBLE);
             loadFragment(about);
 
         } else if (id == R.id.howtouse) {
+            searchView.setVisibility(View.VISIBLE);
             loadFragment(howToUse);
 
         } else if (id == R.id.profile) {
 
         } else if (id == R.id.logout) {
+            mFirebaseAuth.signOut();
 
         }else if(id==R.id.home){
+            searchView.setVisibility(View.VISIBLE);
             loadFragment(patientHomePage);
         }
 

@@ -12,7 +12,7 @@
 
 
     <SearchView
-        android:id="@+id/search_bar_test"
+        android:id="@+id/search_bar"
         android:layout_width="match_parent"
         android:layout_height="38dp"
         android:background="@color/viewColor"
