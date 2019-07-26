@@ -42,7 +42,8 @@ public class SignupUser extends Fragment {
     private TextInputLayout mPasswordAuto;
     private Button mCreateAccountButton;
     private RadioGroup mRadioGroup;
-    private RadioButton mRadioButton;
+    private RadioButton mRadioButtonMale;
+    private RadioButton mRadioButtonFemale;
     FirebaseAuth firebaseAuth;
     ProgressBar progressBar;
 
@@ -73,16 +74,21 @@ public class SignupUser extends Fragment {
         mAgeView=(AutoCompleteTextView)rootView.findViewById(R.id.age_user);
         mAgeAuto=(TextInputLayout)rootView.findViewById(R.id.age_auto_user);
         mRadioGroup=(RadioGroup)rootView.findViewById(R.id.radio_user);
+        mRadioButtonMale=(RadioButton)rootView.findViewById(R.id.male);
+        mRadioButtonFemale=(RadioButton)rootView.findViewById(R.id.female);
+
         mCreateAccountButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 mPasswordAuto.setError(null);
                 mAgeAuto.setError(null);
+                mUserNmaeAuto.setError(null);
                 mEmailAuto.setError(null);
                 String password = mPasswordView.getText().toString();
                 String age = mAgeView.getText().toString();
                 String email = mEmailView.getText().toString();
-                String userName = mUserNameView.getText().toString();
+                final String userName = mUserNameView.getText().toString();
+                final String gender;
                 if(!email.contains("@")){
                     mEmailAuto.setError("Invalid Email Adress");
                     return;
@@ -120,15 +126,22 @@ public class SignupUser extends Fragment {
                     return;
                     // no radio buttons are checked
                 }
+                if(mRadioButtonFemale.isSelected()){
+                    gender="Female";
+
+                }else{
+                    gender="Male";
+                }
+
                 progressBar.setVisibility(View.VISIBLE);
                 firebaseAuth.createUserWithEmailAndPassword(email,password).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         progressBar.setVisibility(View.GONE);
                         if(task.isSuccessful()){
-                           // Patient patient=new Patient(userAge,)
-                            FirebaseDatabase.getInstance().getReference("Users").child(FirebaseAuth.getInstance().getCurrentUser().getUid()).child("Tyoe").setValue("User");
-                            getActivity().onBackPressed();
+                            Patient patient=new Patient(Integer.parseInt(mAgeView.getText().toString()),gender,userName,1);
+                            FirebaseDatabase.getInstance().getReference("Users").child(FirebaseAuth.getInstance().getCurrentUser().getUid()).setValue(patient);
+                  //          getActivity().onBackPressed();
 
                         }else{
                             Toast.makeText(getContext(),task.getException().getMessage(),Toast.LENGTH_SHORT).show();

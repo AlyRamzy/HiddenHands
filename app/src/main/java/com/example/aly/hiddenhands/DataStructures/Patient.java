@@ -5,7 +5,7 @@ package com.example.aly.hiddenhands.DataStructures;
  */
 
 public class Patient extends User {
-    public Patient(int age, char gender, String username, int type) {
+    public Patient(int age, String gender, String username, int type) {
         super(age, gender, username, type);
     }
 }
