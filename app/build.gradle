@@ -23,6 +23,7 @@ dependencies {
     implementation 'com.google.firebase:firebase-database:9.6.0'
     implementation 'com.google.firebase:firebase-config:9.6.0'
     implementation 'com.google.firebase:firebase-auth:9.6.1'
+    implementation 'com.google.firebase:firebase-storage:9.6.1'
 
 
 

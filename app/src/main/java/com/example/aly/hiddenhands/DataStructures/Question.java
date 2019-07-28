@@ -1,5 +1,12 @@
 package com.example.aly.hiddenhands.DataStructures;
 
+import android.os.Build;
+import android.support.annotation.RequiresApi;
+
+import java.util.Date;
+import java.time.LocalTime;
+
+
 /**
  * Created by Nour Ahmed on 7/25/2019.
  */
@@ -8,11 +15,17 @@ public class Question {
     private String content;
     private String patientId;
     private String doctorId;
+    private boolean answered;
+    private Date questionDate;
+    //private LocalTime questionTime;
 
-    public Question(String content, String patientId, String doctorId) {
+    public Question(String content, String patientId, String doctorId, Date questionDate) {
         this.content = content;
         this.patientId = patientId;
         this.doctorId = doctorId;
+        this.questionDate = questionDate;
+        //this.questionTime = questionTime;
+        this.answered=false;
     }
 
     public void setContent(String content) {
@@ -38,4 +51,16 @@ public class Question {
     public String getDoctorId() {
         return doctorId;
     }
+
+    public void setAnswered() {answered = true; }
+
+    public boolean getAnswered () { return answered; }
+
+    public void setQuestionDate ( Date date) { questionDate= date; }
+
+    public Date getQuestionDate () { return questionDate; }
+/*
+    public void setQuestionTime () { questionTime= LocalTime.now(); }
+
+    public LocalTime getQuestionTime () { return questionTime;} */
 }

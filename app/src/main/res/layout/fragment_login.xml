@@ -6,6 +6,15 @@
     android:padding="8dp"
     android:orientation="vertical"
     tools:context="com.example.aly.hiddenhands.fragments.Login">
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+        <ProgressBar
+            android:id="@+id/progress_login"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"/>
+
 
     <LinearLayout
         android:id="@+id/login_form"
@@ -74,18 +83,18 @@
 
 
         <Button
-            android:id="@+id/create_account_button"
+            android:id="@+id/login_button"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_alignParentBottom="true"
             android:layout_marginTop="8dp"
-            android:backgroundTint="@color/buttonDisabledStateColor"
-            android:enabled="false"
+            android:backgroundTint="@color/buttonEnabledStateColor"
             android:text="Login"
-            android:textColor="@color/textDisabledStateColor"
+            android:textColor="@color/textEnabledStateColor"
             android:textStyle="bold" />
 
     </LinearLayout>
+    </RelativeLayout>
 
 
 </ScrollView>

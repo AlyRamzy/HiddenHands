@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android" android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="horizontal"
+        android:padding="16dp" >
+
+        <ImageView
+            android:id="@+id/answeredcheck"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:src="@drawable/wrong"/>
+        <TextView
+            android:id="@+id/patientquestion"
+            android:layout_width="240dp"
+            android:layout_height="match_parent"
+            android:textStyle="bold"
+            android:maxLines="2"
+            android:paddingLeft="10dp"
+            android:paddingRight="10dp"
+            android:textSize="20sp"
+            android:text="This is my question ?"/>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/questiondate"
+                android:layout_width="match_parent"
+                android:textSize="10sp"
+                android:text="22/7/2000"
+                android:gravity="center"
+                android:layout_height="15dp" />
+
+            <TextView
+                android:id="@+id/questiontime"
+                android:layout_width="match_parent"
+                android:textSize="10sp"
+                android:text="7:00 pm"
+                android:gravity="center"
+                android:layout_height="15dp" />
+
+        </LinearLayout>
+
+
+    </LinearLayout>
+
+
+</android.support.constraint.ConstraintLayout>

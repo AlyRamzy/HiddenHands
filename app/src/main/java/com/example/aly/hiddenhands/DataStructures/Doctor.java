@@ -5,16 +5,16 @@ package com.example.aly.hiddenhands.DataStructures;
  */
 
 public class Doctor extends User {
-    private int nationalId;
+    private String nationalId;
     private String photoURL;
 
-    public Doctor(int age, char gender, String username, int type, int nationalId, String photoURL) {
+    public Doctor(int age, String gender, String username, int type, String nationalId, String photoURL) {
         super(age, gender, username, type);
         this.nationalId = nationalId;
         this.photoURL = photoURL;
     }
 
-    public void setNationalId(int nationalId) {
+    public void setNationalId(String nationalId) {
         this.nationalId = nationalId;
     }
 
@@ -22,7 +22,7 @@ public class Doctor extends User {
         this.photoURL = photoURL;
     }
 
-    public int getNationalId() {
+    public String getNationalId() {
         return nationalId;
     }
 

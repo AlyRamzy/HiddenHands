@@ -16,9 +16,11 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import com.example.aly.hiddenhands.fragments.About;
+import com.example.aly.hiddenhands.fragments.DoctorHomePage;
 import com.example.aly.hiddenhands.fragments.FavouriteDoctors;
 import com.example.aly.hiddenhands.fragments.HowToUse;
 import com.example.aly.hiddenhands.fragments.Login;
@@ -27,16 +29,22 @@ import com.example.aly.hiddenhands.fragments.SignupDoctor;
 import com.example.aly.hiddenhands.fragments.SignupUser;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
     NavigationView navigationView;
     android.widget.SearchView searchView;
+    ProgressBar progressBar;
 
+    long type; //1->patient  , 2->doctor
     //My Fragments
     private PatientHomePage patientHomePage;
+    private DoctorHomePage doctorHomePage;
     private About about;
     private HowToUse howToUse;
     private FavouriteDoctors favouriteDoctors;
@@ -46,18 +54,23 @@ public class MainActivity extends AppCompatActivity
 
     //Firebase
     private FirebaseDatabase mFirebaseDatabase;
-    private DatabaseReference mMessageDatabaseReference;
+    private DatabaseReference mUserTypeDatabaseReference;
     private FirebaseAuth mFirebaseAuth;
+    private FirebaseAuth.AuthStateListener mAuthStateListener;
     private boolean Auth=false;
 
 
     @Override
     protected void onResume() {
         super.onResume();
-        if(mFirebaseAuth.getCurrentUser()==null){
-        }
-        else{
-        }
+        mFirebaseAuth.addAuthStateListener(mAuthStateListener);
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        if(mAuthStateListener!=null)
+            mFirebaseAuth.removeAuthStateListener(mAuthStateListener);
     }
 
     @Override
@@ -67,11 +80,14 @@ public class MainActivity extends AppCompatActivity
         //firebase initialize
         mFirebaseDatabase=FirebaseDatabase.getInstance();
         mFirebaseAuth=FirebaseAuth.getInstance();
-        mFirebaseAuth.addAuthStateListener(new FirebaseAuth.AuthStateListener() {
+
+        mAuthStateListener=new FirebaseAuth.AuthStateListener() {
             @Override
             public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
+                progressBar.setVisibility(View.VISIBLE);
                 FirebaseUser firebaseUser=firebaseAuth.getCurrentUser();
                 if(firebaseUser!=null){
+                    searchView.setVisibility(View.VISIBLE);
 
                     navigationView.getMenu().getItem(0).setVisible(true);
                     navigationView.getMenu().getItem(1).setVisible(false);
@@ -88,13 +104,45 @@ public class MainActivity extends AppCompatActivity
                     patientHomePage=new PatientHomePage();
                     favouriteDoctors=new FavouriteDoctors();
                     navigationView.getMenu().getItem(0).setChecked(true);
-                    loadFragment(patientHomePage);
+
+                    mUserTypeDatabaseReference=mFirebaseDatabase.getReference().child("Users").child(firebaseUser.getUid()).child("type");
+                    mUserTypeDatabaseReference.addListenerForSingleValueEvent(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(DataSnapshot dataSnapshot) {
+                           // Toast.makeText(getApplicationContext(),dataSnapshot.getValue(long.class).toString(),Toast.LENGTH_SHORT).show();
+                            type=dataSnapshot.getValue(long.class);
+                            progressBar.setVisibility(View.GONE);
+                            if(type==1){
+                                navigationView.getMenu().getItem(4).setVisible(true);
+                                doctorHomePage=null;
+                                patientHomePage=new PatientHomePage();
+                                favouriteDoctors=new FavouriteDoctors();
+                                loadFragment(patientHomePage);
+                            }
+                            else{
+                                navigationView.getMenu().getItem(4).setVisible(false);
+                                patientHomePage=null;
+                                favouriteDoctors=null;
+                                doctorHomePage=new DoctorHomePage();
+                                loadFragment(doctorHomePage);
+
+                            }
+
+                        }
+
+                        @Override
+                        public void onCancelled(DatabaseError databaseError) {
+
+                        }
+                    });
+
 
                     Toast.makeText(MainActivity.this, "Welcome To HiddenHands", Toast.LENGTH_SHORT).show();
 
                 }
                 else{
-
+                    progressBar.setVisibility(View.GONE);
+                    searchView.setVisibility(View.VISIBLE);
                     navigationView.getMenu().getItem(0).setVisible(false);
                     navigationView.getMenu().getItem(1).setVisible(true);
                     navigationView.getMenu().getItem(2).setVisible(true);
@@ -113,13 +161,15 @@ public class MainActivity extends AppCompatActivity
                 }
 
             }
-        });
+        };
         if(mFirebaseAuth.getCurrentUser()!=null){
             Auth=true;
         }
 
 
         searchView=(android.widget.SearchView)findViewById(R.id.search_bar);
+        progressBar=(ProgressBar) findViewById(R.id.progress_homepage);
+        progressBar.setVisibility(View.VISIBLE);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
@@ -144,7 +194,7 @@ public class MainActivity extends AppCompatActivity
         about=new About();
         howToUse=new HowToUse();
 
-        if(Auth){
+       /* if(Auth){
             patientHomePage=new PatientHomePage();
             favouriteDoctors=new FavouriteDoctors();
             navigationView.getMenu().getItem(0).setChecked(true);
@@ -158,7 +208,7 @@ public class MainActivity extends AppCompatActivity
             navigationView.getMenu().getItem(5).setChecked(true);
             loadFragment(about);
         }
-
+*/
 
 
 
@@ -235,7 +285,14 @@ public class MainActivity extends AppCompatActivity
 
         }else if(id==R.id.home){
             searchView.setVisibility(View.VISIBLE);
-            loadFragment(patientHomePage);
+            if(type==1){
+                loadFragment(patientHomePage);
+
+            }
+            else{
+                loadFragment(doctorHomePage);
+            }
+
         }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
@@ -247,8 +304,7 @@ public class MainActivity extends AppCompatActivity
             FragmentManager fragmentManager = getSupportFragmentManager();
             fragmentManager.beginTransaction()
                     .replace(R.id.fragment_container, fragment)
-                    .addToBackStack(null)
-                    .commit();
+                    .commitAllowingStateLoss();
 
             fragmentManager.executePendingTransactions();
             return true;
