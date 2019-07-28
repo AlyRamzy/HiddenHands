@@ -4,15 +4,10 @@
     android:layout_height="match_parent"
     tools:context="com.example.aly.hiddenhands.fragments.Chats">
 
-    <!-- TODO: Update blank fragment layout -->
-    <TextView
+    <ListView
+        android:id="@+id/chatlist"
+        android:orientation="vertical"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:textColor="@color/black"
-        android:textStyle="bold"
-        android:textSize="26sp"
-        android:layout_marginLeft="20dp"
-        android:text="Chats"
-        />
+        android:layout_height="match_parent"/>
 
 </FrameLayout>
