@@ -56,16 +56,21 @@ public class MainActivity extends AppCompatActivity
     private FirebaseDatabase mFirebaseDatabase;
     private DatabaseReference mUserTypeDatabaseReference;
     private FirebaseAuth mFirebaseAuth;
+    private FirebaseAuth.AuthStateListener mAuthStateListener;
     private boolean Auth=false;
 
 
     @Override
     protected void onResume() {
         super.onResume();
-        if(mFirebaseAuth.getCurrentUser()==null){
-        }
-        else{
-        }
+        mFirebaseAuth.addAuthStateListener(mAuthStateListener);
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        if(mAuthStateListener!=null)
+            mFirebaseAuth.removeAuthStateListener(mAuthStateListener);
     }
 
     @Override
@@ -76,7 +81,7 @@ public class MainActivity extends AppCompatActivity
         mFirebaseDatabase=FirebaseDatabase.getInstance();
         mFirebaseAuth=FirebaseAuth.getInstance();
 
-        mFirebaseAuth.addAuthStateListener(new FirebaseAuth.AuthStateListener() {
+        mAuthStateListener=new FirebaseAuth.AuthStateListener() {
             @Override
             public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
                 progressBar.setVisibility(View.VISIBLE);
@@ -156,7 +161,7 @@ public class MainActivity extends AppCompatActivity
                 }
 
             }
-        });
+        };
         if(mFirebaseAuth.getCurrentUser()!=null){
             Auth=true;
         }

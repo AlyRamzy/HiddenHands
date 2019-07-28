@@ -1,7 +1,9 @@
 package com.example.aly.hiddenhands.fragments;
 
 
+import android.content.Intent;
 import android.content.res.Resources;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.TextInputLayout;
@@ -12,6 +14,7 @@ import android.view.ViewGroup;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
@@ -21,10 +24,16 @@ import com.example.aly.hiddenhands.DataStructures.Doctor;
 import com.example.aly.hiddenhands.DataStructures.Patient;
 import com.example.aly.hiddenhands.R;
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.UploadTask;
+
+import static android.app.Activity.RESULT_OK;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -45,14 +54,34 @@ public class SignupDoctor extends Fragment {
     private RadioGroup mRadioGroup;
     private RadioButton mRadioButtonMale;
     private RadioButton mRadioButtonFemale;
+
+
     FirebaseAuth firebaseAuth;
+    private FirebaseStorage mFirebaseStoarge;
+    private StorageReference mUserPhotoStoargeReference;
     ProgressBar progressBar;
+    ImageView selectImage;
+    ImageView choosenImage;
+    Uri selectedImageUri;
+
+    private static final int RC_PHOTO_PICKER =  2;
 
 
     public SignupDoctor() {
         // Required empty public constructor
     }
 
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+         if (requestCode == RC_PHOTO_PICKER && resultCode == RESULT_OK) {
+             selectedImageUri = data.getData();
+             choosenImage.setImageURI(selectedImageUri);
+
+            // Get a reference to store file at chat_photos/<FILENAME>
+
+        }
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -61,7 +90,11 @@ public class SignupDoctor extends Fragment {
         View rootView= inflater.inflate(R.layout.fragment_signup_doctor, container, false);
         //initialize Firebase
         firebaseAuth= FirebaseAuth.getInstance();
+        mFirebaseStoarge= FirebaseStorage.getInstance();
+        mUserPhotoStoargeReference=mFirebaseStoarge.getReference().child("user_photos");
         //Bind UI references
+        selectImage=(ImageView)rootView.findViewById(R.id.select_image);
+        choosenImage=(ImageView)rootView.findViewById(R.id.choosen_image);
         mUserNameView = (AutoCompleteTextView)rootView.findViewById(R.id.doctor_name);
         mUserNmaeAuto = (TextInputLayout)rootView.findViewById(R.id.doctor_name_auto);
         progressBar=(ProgressBar)rootView.findViewById(R.id.progress_doctor);
@@ -79,6 +112,19 @@ public class SignupDoctor extends Fragment {
         mRadioButtonMale=(RadioButton)rootView.findViewById(R.id.male);
         mRadioButtonFemale=(RadioButton)rootView.findViewById(R.id.female);
 
+        selectedImageUri=null;
+
+        selectImage.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
+                intent.setType("image/jpeg");
+                intent.putExtra(Intent.EXTRA_LOCAL_ONLY, true);
+                startActivityForResult(Intent.createChooser(intent, "Complete action using"), RC_PHOTO_PICKER);
+
+            }
+        });
+
         mCreateAccountButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -87,9 +133,9 @@ public class SignupDoctor extends Fragment {
                 mEmailAuto.setError(null);
                 mNationalIDAuto.setError(null);
                 mUserNmaeAuto.setError(null);
-                String password = mPasswordView.getText().toString();
+                final String password = mPasswordView.getText().toString();
                 String age = mAgeView.getText().toString();
-                String email = mEmailView.getText().toString();
+                final String email = mEmailView.getText().toString();
                 final String userName = mUserNameView.getText().toString();
                 final String gender;
                 String nationalID=mNationalIDView.getText().toString();
@@ -140,23 +186,43 @@ public class SignupDoctor extends Fragment {
                 }else{
                     gender="Male";
                 }
-
+                if(selectedImageUri==null){
+                    Toast.makeText(getContext(),"Please Choose Photo",Toast.LENGTH_SHORT).show();
+                    return;
+                }
                 progressBar.setVisibility(View.VISIBLE);
-                firebaseAuth.createUserWithEmailAndPassword(email,password).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
-                    @Override
-                    public void onComplete(@NonNull Task<AuthResult> task) {
-                        progressBar.setVisibility(View.GONE);
-                        if(task.isSuccessful()){
-                            Doctor doctor=new Doctor(Integer.parseInt(mAgeView.getText().toString()),gender,userName,2,mNationalIDView.getText().toString(),null);
-                            FirebaseDatabase.getInstance().getReference("Users").child(FirebaseAuth.getInstance().getCurrentUser().getUid()).setValue(doctor);
-                          //  getActivity().onBackPressed();
+                StorageReference photoRef = mUserPhotoStoargeReference.child(selectedImageUri.getLastPathSegment());
 
-                        }else{
-                            Toast.makeText(getContext(),task.getException().getMessage(),Toast.LENGTH_SHORT).show();
-                        }
+                // Upload file to Firebase Storage
+                photoRef.putFile(selectedImageUri)
+                        .addOnSuccessListener(getActivity(), new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                            public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                                // When the image has successfully uploaded, we get its download URL
+                                final Uri downloadUrl = taskSnapshot.getDownloadUrl();
+                                // Set the download URL to the message box, so that the user can send it to the database
+                                // FriendlyMessage friendlyMessage = new FriendlyMessage(null, mUsername, downloadUrl.toString());
+                                //  mMessageDatabaseReference.push().setValue(friendlyMessage);
+                                firebaseAuth.createUserWithEmailAndPassword(email,password).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
+                                    @Override
+                                    public void onComplete(@NonNull Task<AuthResult> task) {
+                                        progressBar.setVisibility(View.GONE);
+                                        if(task.isSuccessful()){
+                                            Doctor doctor=new Doctor(Integer.parseInt(mAgeView.getText().toString()),gender,userName,2,mNationalIDView.getText().toString(),downloadUrl.toString());
+                                            FirebaseDatabase.getInstance().getReference("Users").child(FirebaseAuth.getInstance().getCurrentUser().getUid()).setValue(doctor);
+                                            //  getActivity().onBackPressed();
 
-                    }
-                });
+                                        }else{
+                                            Toast.makeText(getContext(),task.getException().getMessage(),Toast.LENGTH_SHORT).show();
+                                        }
+
+                                    }
+                                });
+                            }
+                        });
+
+
+
+
 
 
 
