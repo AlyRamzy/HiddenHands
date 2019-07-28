@@ -16,6 +16,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 
 import com.example.aly.hiddenhands.fragments.About;
+import com.example.aly.hiddenhands.fragments.Disorder;
 import com.example.aly.hiddenhands.fragments.FavouriteDoctors;
 import com.example.aly.hiddenhands.fragments.HowToUse;
 import com.example.aly.hiddenhands.fragments.PatientHomePage;
@@ -30,6 +31,7 @@ public class MainActivity extends AppCompatActivity
     private About about;
     private HowToUse howToUse;
     private FavouriteDoctors favouriteDoctors;
+    private Disorder disorder;
 
     //Firebase
     private FirebaseDatabase mFirebaseDatabase;
@@ -48,6 +50,7 @@ public class MainActivity extends AppCompatActivity
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+        disorder=new Disorder();
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
@@ -55,6 +58,8 @@ public class MainActivity extends AppCompatActivity
             public void onClick(View view) {
                 Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
                         .setAction("Action", null).show();
+                loadFragment(disorder);
+
             }
         });
 
