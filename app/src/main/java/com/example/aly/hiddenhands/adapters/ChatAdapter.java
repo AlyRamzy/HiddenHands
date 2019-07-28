@@ -9,6 +9,7 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.example.aly.hiddenhands.DataStructures.Chat;
@@ -54,8 +55,8 @@ public class ChatAdapter extends ArrayAdapter<Chat>
 
         Chat chat = getItem(position);
 
-        mdataReference.child(chat.getUserId()).child("photoURL");
-        musernameReference.child(chat.getUserId()).child("username");
+        mdataReference=mdataReference.child(chat.getUserId()).child("photoURL");
+        musernameReference=musernameReference.child(chat.getUserId()).child("username");
 
         musernameReference.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
