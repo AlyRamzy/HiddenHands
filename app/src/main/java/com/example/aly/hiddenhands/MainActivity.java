@@ -20,6 +20,7 @@ import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import com.example.aly.hiddenhands.fragments.About;
+import com.example.aly.hiddenhands.fragments.ChooseDoctor;
 import com.example.aly.hiddenhands.fragments.DoctorHomePage;
 import com.example.aly.hiddenhands.fragments.FavouriteDoctors;
 import com.example.aly.hiddenhands.fragments.HowToUse;
@@ -51,6 +52,7 @@ public class MainActivity extends AppCompatActivity
     private SignupUser signupUser;
     private Login login;
     private SignupDoctor signupDoctor;
+    private ChooseDoctor chooseDoctor;
 
     //Firebase
     private FirebaseDatabase mFirebaseDatabase;
@@ -77,6 +79,7 @@ public class MainActivity extends AppCompatActivity
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
         //firebase initialize
         mFirebaseDatabase=FirebaseDatabase.getInstance();
         mFirebaseAuth=FirebaseAuth.getInstance();
@@ -193,6 +196,14 @@ public class MainActivity extends AppCompatActivity
         //initialize Fragments
         about=new About();
         howToUse=new HowToUse();
+        chooseDoctor=new ChooseDoctor();
+        searchView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                searchView.setVisibility(View.GONE);
+                loadFragment(chooseDoctor);
+            }
+        });
 
        /* if(Auth){
             patientHomePage=new PatientHomePage();
