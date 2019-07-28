@@ -6,36 +6,27 @@ package com.example.aly.hiddenhands.DataStructures;
 
 public class Message {
     private String content;
-    private String patientId;
-    private String doctorId;
+    private String senderId;
 
-    public Message(String content, String patientId, String doctorId) {
+    public Message(String content, String senderId) {
         this.content = content;
-        this.patientId = patientId;
-        this.doctorId = doctorId;
+        this.senderId = senderId;
     }
 
     public void setContent(String content) {
         this.content = content;
     }
 
-    public void setPatientId(String patientId) {
-        this.patientId = patientId;
-    }
-
-    public void setDoctorId(String doctorId) {
-        this.doctorId = doctorId;
-    }
-
     public String getContent() {
         return content;
     }
 
-    public String getPatientId() {
-        return patientId;
+
+    public void setSenderId(String senderId) {
+        this.senderId = senderId;
     }
 
-    public String getDoctorId() {
-        return doctorId;
+    public String getSenderId() {
+        return senderId;
     }
 }

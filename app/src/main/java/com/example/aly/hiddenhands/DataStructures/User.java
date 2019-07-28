@@ -6,11 +6,11 @@ package com.example.aly.hiddenhands.DataStructures;
 
 public class User {
     private int age;
-    private char gender;
+    private String gender;
     private String username;
     private int type;              //1->patient   2->doctor
 
-    public User(int age, char gender, String username, int type) {
+    public User(int age, String gender, String username, int type) {
         this.age = age;
         this.gender = gender;
         this.username = username;
@@ -21,7 +21,7 @@ public class User {
         this.age = age;
     }
 
-    public void setGender(char gender) {
+    public void setGender(String gender) {
         this.gender = gender;
     }
 
@@ -37,7 +37,7 @@ public class User {
         return age;
     }
 
-    public char getGender() {
+    public String getGender() {
         return gender;
     }
 

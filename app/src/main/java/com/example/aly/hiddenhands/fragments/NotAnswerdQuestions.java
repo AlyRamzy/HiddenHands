@@ -12,10 +12,10 @@ import com.example.aly.hiddenhands.R;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class Notifications extends Fragment {
+public class NotAnswerdQuestions extends Fragment {
 
 
-    public Notifications() {
+    public NotAnswerdQuestions() {
         // Required empty public constructor
     }
 
@@ -24,7 +24,8 @@ public class Notifications extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_notifications, container, false);
+        View view= inflater.inflate(R.layout.fragment_not_answerd_questions, container, false);
+        return view;
     }
 
 }
