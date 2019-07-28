@@ -20,8 +20,13 @@ import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import com.example.aly.hiddenhands.fragments.About;
+
 import com.example.aly.hiddenhands.fragments.ChooseDoctor;
+
+import com.example.aly.hiddenhands.fragments.Disorder;
+
 import com.example.aly.hiddenhands.fragments.DoctorHomePage;
+
 import com.example.aly.hiddenhands.fragments.FavouriteDoctors;
 import com.example.aly.hiddenhands.fragments.HowToUse;
 import com.example.aly.hiddenhands.fragments.Login;
@@ -49,6 +54,7 @@ public class MainActivity extends AppCompatActivity
     private About about;
     private HowToUse howToUse;
     private FavouriteDoctors favouriteDoctors;
+    private Disorder disorder;
     private SignupUser signupUser;
     private Login login;
     private SignupDoctor signupDoctor;
@@ -175,6 +181,7 @@ public class MainActivity extends AppCompatActivity
         progressBar.setVisibility(View.VISIBLE);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+        disorder=new Disorder();
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
@@ -182,6 +189,8 @@ public class MainActivity extends AppCompatActivity
             public void onClick(View view) {
                 Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
                         .setAction("Action", null).show();
+                loadFragment(disorder);
+
             }
         });
 

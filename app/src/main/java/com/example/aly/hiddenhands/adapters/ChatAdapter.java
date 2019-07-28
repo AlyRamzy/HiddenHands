@@ -23,6 +23,8 @@ import com.google.firebase.database.ValueEventListener;
 
 import java.util.List;
 
+import de.hdodenhof.circleimageview.CircleImageView;
+
 /**
  * Created by Nour Ahmed on 7/26/2019.
  */
@@ -49,7 +51,7 @@ public class ChatAdapter extends ArrayAdapter<Chat>
             convertView = ((Activity) getContext()).getLayoutInflater().inflate(R.layout.chat_listview_item, parent, false);
         }
 
-        final ImageView doctorImageView = (ImageView) convertView.findViewById(R.id.doctorImage);
+        final CircleImageView doctorImageView = (CircleImageView) convertView.findViewById(R.id.doctorImage);
         final TextView doctorUsernameView = (TextView) convertView.findViewById(R.id.doctorUsername);
         final TextView messageView = (TextView) convertView.findViewById(R.id.message);
 
