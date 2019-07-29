@@ -26,7 +26,7 @@
                 android:layout_height="wrap_content"
                 android:id="@+id/doctorUsername"
                 android:text="nour"
-                android:textSize="40sp"
+                android:textSize="24sp"
                 android:textColor="@color/black"
                 />
 
@@ -36,7 +36,7 @@
                 android:id="@+id/message"
                 android:maxLines="2"
                 android:text="blablabakfjvrj"
-                android:textSize="24sp"
+                android:textSize="16sp"
                 android:textColor="@color/black"/>
         </LinearLayout>
 
