@@ -16,7 +16,7 @@
         tools:layout_editor_absoluteY="69dp">
 
         <ImageView
-            android:id="@+id/answeredcheck"
+            android:id="@+id/questionicon"
             android:layout_width="25dp"
             android:layout_height="25dp"
             android:src="@drawable/wrong" />
@@ -37,14 +37,13 @@
                 android:textSize="20sp"
                 android:textStyle="bold" />
 
-            <TextView
-                android:id="@+id/patientsquestionanswer"
-                android:layout_width="250dp"
+            <EditText
+                android:id="@+id/doctorsreply"
+                android:layout_width="240dp"
                 android:layout_height="wrap_content"
                 android:paddingLeft="10dp"
                 android:paddingRight="10dp"
-                android:text="This is the doctors answer ? This is the doctors answer ?"
-                android:textSize="17sp" />
+                android:hint="Reply here"/>
 
         </LinearLayout>
 

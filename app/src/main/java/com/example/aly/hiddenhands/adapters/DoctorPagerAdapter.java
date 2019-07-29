@@ -22,6 +22,7 @@ public class DoctorPagerAdapter  extends FragmentPagerAdapter {
     Sessions mSessions;
 
 
+
     public DoctorPagerAdapter(FragmentManager fm) {
         super(fm);
 

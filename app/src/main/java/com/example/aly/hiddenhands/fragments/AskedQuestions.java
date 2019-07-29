@@ -18,7 +18,7 @@ import java.util.ArrayList;
 /**
  * A simple {@link Fragment} subclass.
  *
- * 
+
  */
 public class AskedQuestions extends Fragment {
 
@@ -36,7 +36,7 @@ public class AskedQuestions extends Fragment {
         ListView listview = (ListView) view.findViewById(R.id.patientquestionslist);
         ArrayList<Question> patientQuestionsList = new ArrayList<Question>();
         date1= new Date(1,2,3);
-        patientQuestionsList.add(new Question ("this question", "123445", "234556", date1));
+        patientQuestionsList.add(new Question ("this question", "123445", "234556", "the answer", date1));
         AskQuestionAdapter adapter = new AskQuestionAdapter(getContext(), patientQuestionsList);
         listview.setAdapter(adapter);
         return view;
